@@ -2,11 +2,11 @@
 <head>
     <title>World Notes</title>
 
-    <meta charset="utf-8" />
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}" /> 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon.ico') }}"> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/leaflet.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script src="{{ url_for('static', filename='js/leaflet.js') }}"></script>
     <script src="{{ url_for('static', filename='js/SmoothWheelZoom.js') }}"></script>
 </head>
@@ -16,19 +16,19 @@
 <div class="form-popup" id="location_form_container">
   <form action="/location/create/" class="form-container" method="POST" id="location_form" enctype="multipart/form-data">
     <h1 id="form_title">Create New</h1>
-    <input type="hidden" placeholder="0" name="location_id" id="form_location_id">
-    <input type="hidden" placeholder="0" name="zoom" id="form_zoom">
+    <input type="hidden" name="location_id" id="form_location_id">
+    <input type="hidden" name="zoom" id="form_zoom">
 
-    <label for="latitude"><b>Latitude *</b></label>
+    <label for="form_latitude"><b>Latitude *</b></label>
     <input type="text" placeholder="Enter Latitude" name="latitude" id="form_latitude" required>
 
-    <label for="longitude"><b>Longitude *</b></label>
+    <label for="form_longitude"><b>Longitude *</b></label>
     <input type="text" placeholder="Enter Longitude" name="longitude" id="form_longitude" required>
 <!-- hide address for now
-    <label for="address"><b>Address</b></label>
+    <label for="form_address"><b>Address</b></label>
     <input type="text" placeholder="Enter Address" name="address" id="form_address">
 -->
-    <label for="note"><b>Note</b></label>
+    <label for="form_note"><b>Note</b></label>
     <input type="text" placeholder="Enter Note" name="note" id="form_note">
 
     <!-- <label for="file"><b>File</b></label> -->
@@ -57,7 +57,7 @@
         smoothSensitivity: 1,   // zoom speed. default is 1
         minZoom: 2.2,
         maxZoom: 18,
-    }).locate({setView: true, timeout: 100});
+    }).setView([39.747552, -104.985764], 3);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 18,

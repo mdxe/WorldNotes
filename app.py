@@ -175,4 +175,4 @@ def custom_static(filename):
         return render_template('error.html', msg="Error deleting location: " + getattr(e, 'message', repr(e)))
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5001)

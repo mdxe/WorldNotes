@@ -1,0 +1,14 @@
+fix lighttpd hosting
+read GPS data from pic and set correct coordinates
+prevent 2 locations from having same coordinates (or very closeby)
+change mouse pointer when over a marker
+add ability to update the file
+
+done:
+fix file upload
+on click for existing point -> popup edit form
+add coordinates and zoom to url so that a reload doesn't move the view
+change marker to red if no picture available
+allow soft delete
+block overwriting of data or files
+display file uploaded (text or image)

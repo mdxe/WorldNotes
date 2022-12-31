@@ -173,5 +173,6 @@ def custom_static(filename):
         return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
     except Exception as e:
         return render_template('error.html', msg="Error deleting location: " + getattr(e, 'message', repr(e)))
-    
-app.run(port=5000)
+
+if __name__ == '__main__':
+    app.run(port=5000)

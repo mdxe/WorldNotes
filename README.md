@@ -13,7 +13,7 @@ Simple Flask/Python/SQLite/OpenStreetMap app where you can save a picture and a 
 
 2. Navigate to: http://127.0.0.1:5001/
 
-3. Right click to add a map note.
+3. Right-click or long-press to add a map note.
 
 Demo: https://flatbottom.pythonanywhere.com
 
@@ -23,15 +23,12 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 
 - [ ] read GPS data from pic and set coordinates according to that instead (optional)
 - [ ] add authentication and private worlds
-- [ ] fix lighttpd hosting
-- [ ] warn or prevent when overwriting file
-- [X] Combine lat/long in form to save space
-- [X] put all form button on same line to save space
+- [ ] warn when overwriting files
 
 
 ## Credits
 
-Thanks to Flask-with-DB: https://github.com/Ruhil-DS/Flask-with-DB, which this project is based on.
+Thanks to [Flask-with-DB](https://github.com/Ruhil-DS/Flask-with-DB).
 
 
 

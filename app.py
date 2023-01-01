@@ -127,24 +127,41 @@ def add_location():
 
 @app.route('/location/<int:location_id>/update/', methods=["GET", "POST"])
 def update(location_id):
-    location = Location.query.filter_by(location_id=location_id).first()
-    if request.method == "GET":
-        return render_template('update.html', location=location)
-    elif request.method == "POST":
-        location.latitude  = sanitize_latitude( float( request.form.get('latitude') ) )
-        location.longitude = sanitize_longitude( float( request.form.get('longitude') ) )
-        print("lat:" + str(location.latitude) + " long:" + str(location.longitude) + " zoom:" + str(request.form.get('zoom') ) )
-        # location.address = request.form.get('address']
-        location.note = escape(request.form.get('note') )
-        #print(request.form.get('file'])
-        #location.file = request.form.get('file']
-        try:
+    try:
+        location = Location.query.filter_by(location_id=location_id).first()
+        if request.method == "GET":
+            return render_template('update.html', location=location)
+        elif request.method == "POST":
+            location.latitude  = sanitize_latitude( float( request.form.get('latitude') ) )
+            location.longitude = sanitize_longitude( float( request.form.get('longitude') ) )
+            print("lat:" + str(location.latitude) + " long:" + str(location.longitude) + " zoom:" + str(request.form.get('zoom') ) )
+            # location.address = request.form.get('address']
+            location.note = escape(request.form.get('note') )
+            if 'file' in request.files:
+                print("File in request")
+                file = request.files['file']
+                if file.filename == '':
+                    print('No selected file')
+                else:
+                    filename  = secure_filename(file.filename) # save original filename to DB
+                    extension = '.' in filename and filename.rsplit('.', 1)[1].lower()
+                    print("File selected: " + filename)
+                    if allowed_file(filename) and not exists(os.path.join(app.config['UPLOAD_FOLDER'], filename) ):
+                        newfilename = str(location.latitude) + str(location.longitude) + "." + extension
+                        print("Allowed extension AND file doesn't exist, saving to:" + os.path.join(app.config['UPLOAD_FOLDER'], newfilename))
+                        file.save(os.path.join(app.config['UPLOAD_FOLDER'], newfilename)) # save file to disk using location as filename
+                        location.file = filename
+                        location.extension = extension
+                    else:
+                        print("Unknown file extension or file already exist")
+            else:
+                print('No file')
             db.session.commit()
-        except Exception as e:
-            return render_template('error.html', msg="Error updating location: " + getattr(e, 'message', repr(e)))
-        finally:
-            print("redirecting to: " + ("/" + str(location.latitude) + "/" + str(location.longitude) + "/" + str(request.form.get('zoom') ) ) )
-            return redirect("/" + str(location.latitude) + "/" + str(location.longitude) + "/" + str(request.form.get('zoom') ) )
+    except Exception as e:
+        return render_template('error.html', msg="Error updating location: " + getattr(e, 'message', repr(e)))
+    finally:
+        print("redirecting to: " + ("/" + str(location.latitude) + "/" + str(location.longitude) + "/" + str(request.form.get('zoom') ) ) )
+        return redirect("/" + str(location.latitude) + "/" + str(location.longitude) + "/" + str(request.form.get('zoom') ) )
 
 
 @app.route('/location/<int:location_id>/delete/', methods=["GET", "POST"])

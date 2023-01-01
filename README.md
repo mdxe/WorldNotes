@@ -22,9 +22,9 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 ## Todo
 
 - [ ] read GPS data from pic and set coordinates
-- [ ] add ability to change images
 - [ ] add authentication and private worlds
 - [ ] fix lighttpd hosting
+- [ ] Combine lat/long in form to save space
 
 
 - [X] fix file upload
@@ -35,6 +35,7 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 - [X] block overwriting of data or files
 - [X] display file uploaded (text or image)
 - [X] change mouse pointer when over a marker
+- [X] add ability to change images
 
 ## Credits
 

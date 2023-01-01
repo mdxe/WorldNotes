@@ -10,9 +10,8 @@ html, body, #container /*, and all other map parent selectors*/ {
 }
 
 /* TO FIX BELOW */
-#map a:focus
-{
- filter: contrast(70%) brightness(70%);
+#map a:focus {
+    filter: contrast(70%) brightness(70%);
 }
 
 /* modal form */
@@ -25,7 +24,7 @@ html, body, #container /*, and all other map parent selectors*/ {
     right: 15px;
     border: 3px solid #f1f1f1;
     z-index: 900;
-  transition: left .5s ease-in, top .5s ease-in;
+    transition: left .5s ease-in, top .5s ease-in;
 }
 
 /* Add styles to the form container */

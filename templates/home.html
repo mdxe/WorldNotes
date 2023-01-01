@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
     <title>World Notes</title>
 
@@ -9,13 +10,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <script src="{{ url_for('static', filename='js/leaflet.js') }}"></script>
     <script src="{{ url_for('static', filename='js/SmoothWheelZoom.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
 <body>
 <div id="map" onclick="close_form()"></div>
     
 <div class="form-popup" id="location_form_container">
   <form action="/location/create/" class="form-container" method="POST" id="location_form" enctype="multipart/form-data">
-    <h1 id="form_title">Create New</h1>
+    <h3 id="form_title">Create New</h3>
     <input type="hidden" name="location_id" id="form_location_id">
     <input type="hidden" name="zoom" id="form_zoom">
 
@@ -32,6 +34,7 @@
     <input type="text" placeholder="Enter Note" name="note" id="form_note">
 
     <!-- <label for="file"><b>File</b></label> -->
+    <img src="" alt="place holder" width="300" id="note_image">
     <input type="file" name="file" id="form_file">
 
     <button type="submit" class="btn">Save</button>
@@ -39,92 +42,81 @@
     <button type="button" class="btn delete" id="form_delete">Delete</button>
   </form>
 </div>
-    
+
 <script>
-    
-    var MarkerIcon = L.Icon.extend({
-        options: {
-            shadowUrl: null,
-            iconSize:     [16, 16],
-        }
-    });
-    var greenIcon = new MarkerIcon({iconUrl: '{{ url_for('static', filename='images/marker-green-video.png') }}'}),
-        redIcon = new MarkerIcon({iconUrl: '{{ url_for('static', filename='images/marker-red-video.png') }}'});
-    
-    var map = L.map('map', {
-        scrollWheelZoom: false, // disable original zoom function
-        smoothWheelZoom: true,  // enable smooth zoom 
-        smoothSensitivity: 1,   // zoom speed. default is 1
-        minZoom: 2.2,
-        maxZoom: 18,
-    }).setView([39.747552, -104.985764], 3);
+var MarkerIcon = L.Icon.extend({
+	options: {
+		shadowUrl: null,
+		iconSize:     [16, 16],
+	}
+});
+var greenIcon = new MarkerIcon({iconUrl: '{{ url_for('static', filename='images/marker-green-video.png') }}'}),
+	redIcon = new MarkerIcon({iconUrl: '{{ url_for('static', filename='images/marker-red-video.png') }}'});
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
+var map = L.map('map', {
+	scrollWheelZoom: false, // disable original zoom function
+	smoothWheelZoom: true,  // enable smooth zoom 
+	smoothSensitivity: 1,   // zoom speed. default is 1
+	minZoom: 2.2,
+	maxZoom: 18,
+}).setView([39.747552, -104.985764], 3);
 
-    {% if flag %}
-        {% for location in locations %}
-            {% if lat %}
-                map.setView([ {{lat}}, {{long}} ], {{zoom}});
-            {% endif %}
-            {% if location['deleted'] != 1 %} // only display marker if not deleted
-                {% if location['file'] == 'none' %} // display red marker if no file defined
-                    L.marker([{{ location['latitude'] }}, {{location['longitude'] }}], {icon: redIcon}).addTo(map)
-                {% else %}
-                    L.marker([{{ location['latitude'] }}, {{location['longitude'] }}], {icon: greenIcon}).addTo(map)
-                 {% endif %}
-                  .on('click', function(e) {
-                        document.getElementById("form_title").textContent = "Update Location"
-                        document.getElementById("location_form").action   = "/location/{{ location['location_id'] }}/update/"
-                        document.getElementById("form_latitude").value    = {{ location['latitude'] + 0.0 }};
-                        document.getElementById("form_longitude").value   = {{ location['longitude'] + 0.0 }};
-                        document.getElementById("form_note").value        = "{{ location['note'] }}";
-                        document.getElementById("form_zoom").value        = map.getZoom().toFixed(1);
-                        var img = new Image();
-                        img.src = "/uploads/{{location['latitude']}}{{location['longitude']}}.{{location['extension']}}";
-                        img.width = 300;
-                        /* img.height = 1;*/
-                        img.alt = "{{location['file']}}";
-                        img.id = "form_file";
-                        /* file_element = '<input type="text" placeholder="none" name="file" id="form_file" disabled>' */
-                        document.getElementById('form_file').outerHTML = img.outerHTML
-             
-                        document.getElementById("form_delete").setAttribute('onclick', "location.href='/location/{{location['location_id']}}/delete'");
-                        document.getElementById("form_delete").style.display = "block";
-                        document.getElementById("location_form_container").style.display = "block";
-                    });
-             {% endif %}
-        {% endfor %}
-    {% endif %}
-  
-    function open_form(e) {
-        longitude = e.latlng.lng.toFixed(6);
-        longitude = (longitude % 360 + 540) % 360 - 180;
-        document.getElementById("form_title").textContent = "Create New"
-        document.getElementById("location_form").action   = "/location/create/"
-        document.getElementById("form_latitude").value    = e.latlng.lat.toFixed(6);
-        document.getElementById("form_longitude").value   = longitude;
-        document.getElementById("form_note").value        = "";
-        document.getElementById("form_zoom").value        = map.getZoom().toFixed(1);  // toFixed -> make sure it's a float (not an int)
-        file_element = '<input type="file" name="file" id="form_file">'
-        document.getElementById('form_file').outerHTML = file_element
-        document.getElementById("form_file").value        = "";
-        document.getElementById("form_delete").style.display = "none";
-        document.getElementById("location_form_container").style.display = "block";
-    }
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	maxZoom: 18,
+	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(map);
 
-    function close_form() {
-      document.getElementById("location_form_container").style.display = "none";
-    }
-   
-    map.addEventListener('contextmenu', e => {
-        open_form(e);
-        // e.preventDefault();
-        return false;
-    });
+{% if flag %}
+	{% for location in locations %}
+		{% if lat %}
+			map.setView([ {{lat}}, {{long}} ], {{zoom}});
+		{% endif %}
+		{% if location['deleted'] != 1 %} // only display marker if not deleted
+			{% if location['file'] == 'none' %} // display red marker if no file defined
+				L.marker([{{ location['latitude'] }}, {{location['longitude'] }}], {icon: redIcon}).addTo(map)
+			{% else %}
+				L.marker([{{ location['latitude'] }}, {{location['longitude'] }}], {icon: greenIcon}).addTo(map)
+			 {% endif %}
+			  .on('click', function(e) {
+					document.getElementById("form_title").textContent = "Update Location"
+					document.getElementById("location_form").action   = "/location/{{ location['location_id'] }}/update/"
+					document.getElementById("form_latitude").value    = {{ location['latitude'] + 0.0 }};
+					document.getElementById("form_longitude").value   = {{ location['longitude'] + 0.0 }};
+					document.getElementById("form_note").value        = "{{ location['note'] }}";
+					document.getElementById("form_zoom").value        = map.getZoom().toFixed(1);
+					document.getElementById("note_image").setAttribute('src', "/uploads/{{location['latitude']}}{{location['longitude']}}.{{location['extension']}}");
+					document.getElementById("note_image").setAttribute('alt', "{{location['file']}}");
+					document.getElementById("note_image").style.display = "block";
+					document.getElementById("form_delete").setAttribute('onclick', "location.href='/location/{{location['location_id']}}/delete'");
+					document.getElementById("form_delete").style.display = "block";
+					document.getElementById("location_form_container").style.display = "block";
+				});
+		 {% endif %}
+	{% endfor %}
+{% endif %}
 
+function open_form(e) {
+	longitude = e.latlng.lng.toFixed(6);
+	longitude = (longitude % 360 + 540) % 360 - 180;
+	document.getElementById("form_title").textContent = "Create New"
+	document.getElementById("location_form").action   = "/location/create/"
+	document.getElementById("form_latitude").value    = e.latlng.lat.toFixed(6);
+	document.getElementById("form_longitude").value   = longitude;
+	document.getElementById("form_note").value        = "";
+	document.getElementById("form_zoom").value        = map.getZoom().toFixed(1);  // toFixed -> make sure it's a float (not an int)
+	document.getElementById("form_delete").style.display = "none";
+    document.getElementById("note_image").style.display = "none";
+	document.getElementById("location_form_container").style.display = "block";
+}
+
+function close_form() {
+  document.getElementById("location_form_container").style.display = "none";
+}
+
+map.addEventListener('contextmenu', e => {
+	open_form(e);
+	// e.preventDefault();
+	return false;
+});
 </script>
-
 </body>
 </html>

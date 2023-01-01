@@ -21,10 +21,11 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 
 ## Todo
 
-- [ ] fix lighttpd hosting
 - [ ] read GPS data from pic and set coordinates
-- [ ] change mouse pointer when over a marker
-- [ ] add ability to change the file
+- [ ] add ability to change images
+- [ ] add authentication and private worlds
+- [ ] fix lighttpd hosting
+
 
 - [X] fix file upload
 - [X] on click for existing point -> popup edit form
@@ -33,6 +34,7 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 - [X] allow soft delete
 - [X] block overwriting of data or files
 - [X] display file uploaded (text or image)
+- [X] change mouse pointer when over a marker
 
 ## Credits
 

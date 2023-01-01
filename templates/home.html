@@ -11,7 +11,7 @@
     <script src="{{ url_for('static', filename='js/SmoothWheelZoom.js') }}"></script>
 </head>
 <body>
-<div id="map" style="cursor: pointer" onclick="close_form()"></div>
+<div id="map" onclick="close_form()"></div>
     
 <div class="form-popup" id="location_form_container">
   <form action="/location/create/" class="form-container" method="POST" id="location_form" enctype="multipart/form-data">

@@ -73,14 +73,14 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				L.marker([{{ location['latitude'] }}, {{location['longitude'] }}], {icon: greenIcon}).addTo(map)
 			 {% endif %}
 			  .on('click', function(e) {
+					document.getElementById("note_image").setAttribute('src', "/uploads/{{location['latitude']}}{{location['longitude']}}.{{location['extension']}}");
+					document.getElementById("note_image").setAttribute('alt', "{{location['file']}}");
+					document.getElementById("note_image").style.display = "block";
 					document.getElementById("submit_btn").textContent = "Save"
 					document.getElementById("location_form").action   = "/location/{{ location['location_id'] }}/update/"
 					document.getElementById("form_latlong").value    = {{ location['latitude'] }}+","+{{ location['longitude'] }};
 					document.getElementById("form_note").value        = "{{ location['note'] }}";
 					document.getElementById("form_zoom").value        = map.getZoom().toFixed(1);
-					document.getElementById("note_image").setAttribute('src', "/uploads/{{location['latitude']}}{{location['longitude']}}.{{location['extension']}}");
-					document.getElementById("note_image").setAttribute('alt', "{{location['file']}}");
-					document.getElementById("note_image").style.display = "block";
 					document.getElementById("form_delete").setAttribute('onclick', "location.href='/location/{{location['location_id']}}/delete'");
 					document.getElementById("form_delete").style.display = "inline";
 					document.getElementById("location_form_container").style.display = "block";

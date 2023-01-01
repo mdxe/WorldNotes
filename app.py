@@ -94,8 +94,9 @@ def home_loc(lat, long, zoom):
 def add_location():
     if request.method == "POST":
         try:
-            latitude  = sanitize_latitude( float( request.form.get('latitude') ) )
-            longitude = sanitize_longitude( float( request.form.get('longitude') ) )
+            latitude, longitude  = request.form.get('latlong').split(",", maxsplit=1)
+            latitude  = sanitize_latitude( float( latitude ) )
+            longitude = sanitize_longitude( float( longitude ) )
             address   = escape(request.form.get('address')) if request.form.get('address') else "unkown"
             note      = escape(request.form.get('note')) if request.form.get('note') else "none"
             filename = "none"
@@ -132,8 +133,9 @@ def update(location_id):
         if request.method == "GET":
             return render_template('update.html', location=location)
         elif request.method == "POST":
-            location.latitude  = sanitize_latitude( float( request.form.get('latitude') ) )
-            location.longitude = sanitize_longitude( float( request.form.get('longitude') ) )
+            latitude, longitude  = request.form.get('latlong').split(",", maxsplit=1)
+            location.latitude  = sanitize_latitude( float( latitude ) )
+            location.longitude = sanitize_longitude( float( longitude ) )
             print("lat:" + str(location.latitude) + " long:" + str(location.longitude) + " zoom:" + str(request.form.get('zoom') ) )
             # location.address = request.form.get('address']
             location.note = escape(request.form.get('note') )

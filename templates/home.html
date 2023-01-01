@@ -17,15 +17,11 @@
     
 <div class="form-popup" id="location_form_container">
   <form action="/location/create/" class="form-container" method="POST" id="location_form" enctype="multipart/form-data">
-    <h3 id="form_title">Create New</h3>
     <input type="hidden" name="location_id" id="form_location_id">
     <input type="hidden" name="zoom" id="form_zoom">
 
-    <label for="form_latitude"><b>Latitude *</b></label>
-    <input type="text" placeholder="Enter Latitude" name="latitude" id="form_latitude" required>
-
-    <label for="form_longitude"><b>Longitude *</b></label>
-    <input type="text" placeholder="Enter Longitude" name="longitude" id="form_longitude" required>
+    <label for="form_latlong"><b>Latitude *</b></label>
+    <input type="text" placeholder="Enter Latitude,Longitude" name="latlong" id="form_latlong" required>
 <!-- hide address for now
     <label for="form_address"><b>Address</b></label>
     <input type="text" placeholder="Enter Address" name="address" id="form_address">
@@ -37,7 +33,7 @@
     <img src="" alt="place holder" width="300" id="note_image">
     <input type="file" name="file" id="form_file">
 
-    <button type="submit" class="btn">Save</button>
+    <button type="submit" class="btn" id="submit_btn">Save</button>
     <button type="button" class="btn cancel" onclick="close_form()">Cancel</button>
     <button type="button" class="btn delete" id="form_delete">Delete</button>
   </form>
@@ -77,17 +73,16 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				L.marker([{{ location['latitude'] }}, {{location['longitude'] }}], {icon: greenIcon}).addTo(map)
 			 {% endif %}
 			  .on('click', function(e) {
-					document.getElementById("form_title").textContent = "Update Location"
+					document.getElementById("submit_btn").textContent = "Save"
 					document.getElementById("location_form").action   = "/location/{{ location['location_id'] }}/update/"
-					document.getElementById("form_latitude").value    = {{ location['latitude'] + 0.0 }};
-					document.getElementById("form_longitude").value   = {{ location['longitude'] + 0.0 }};
+					document.getElementById("form_latlong").value    = {{ location['latitude'] }}+","+{{ location['longitude'] }};
 					document.getElementById("form_note").value        = "{{ location['note'] }}";
 					document.getElementById("form_zoom").value        = map.getZoom().toFixed(1);
 					document.getElementById("note_image").setAttribute('src', "/uploads/{{location['latitude']}}{{location['longitude']}}.{{location['extension']}}");
 					document.getElementById("note_image").setAttribute('alt', "{{location['file']}}");
 					document.getElementById("note_image").style.display = "block";
 					document.getElementById("form_delete").setAttribute('onclick', "location.href='/location/{{location['location_id']}}/delete'");
-					document.getElementById("form_delete").style.display = "block";
+					document.getElementById("form_delete").style.display = "inline";
 					document.getElementById("location_form_container").style.display = "block";
 				});
 		 {% endif %}
@@ -97,10 +92,9 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function open_form(e) {
 	longitude = e.latlng.lng.toFixed(6);
 	longitude = (longitude % 360 + 540) % 360 - 180;
-	document.getElementById("form_title").textContent = "Create New"
+	document.getElementById("submit_btn").textContent = "Create"
 	document.getElementById("location_form").action   = "/location/create/"
-	document.getElementById("form_latitude").value    = e.latlng.lat.toFixed(6);
-	document.getElementById("form_longitude").value   = longitude;
+	document.getElementById("form_latlong").value    = e.latlng.lat.toFixed(6)+","+longitude;
 	document.getElementById("form_note").value        = "";
 	document.getElementById("form_zoom").value        = map.getZoom().toFixed(1);  // toFixed -> make sure it's a float (not an int)
 	document.getElementById("form_delete").style.display = "none";

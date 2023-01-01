@@ -24,7 +24,6 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 - [ ] read GPS data from pic and set coordinates
 - [ ] add authentication and private worlds
 - [ ] fix lighttpd hosting
-- [ ] Combine lat/long in form to save space
 
 
 - [X] fix file upload
@@ -36,6 +35,8 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 - [X] display file uploaded (text or image)
 - [X] change mouse pointer when over a marker
 - [X] add ability to change images
+- [X] Combine lat/long in form to save space
+- [X] put all form button on same line to save space
 
 ## Credits
 

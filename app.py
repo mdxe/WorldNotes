@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, escape, send_from_directory
+from flask import Flask, render_template, request, redirect, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import declarative_base
 import os
@@ -97,8 +97,8 @@ def add_location():
             latitude, longitude  = request.form.get('latlong').split(",", maxsplit=1)
             latitude  = sanitize_latitude( float( latitude ) )
             longitude = sanitize_longitude( float( longitude ) )
-            address   = escape(request.form.get('address')) if request.form.get('address') else "unkown"
-            note      = escape(request.form.get('note')) if request.form.get('note') else "none"
+            address   = "unkown"
+            note      = request.form.get('note') if request.form.get('note') else "none"
             filename = "none"
             extension = "none"
             # print(request.__dict__)
@@ -138,7 +138,7 @@ def update(location_id):
             location.longitude = sanitize_longitude( float( longitude ) )
             print("lat:" + str(location.latitude) + " long:" + str(location.longitude) + " zoom:" + str(request.form.get('zoom') ) )
             # location.address = request.form.get('address']
-            location.note = escape(request.form.get('note') )
+            location.note = request.form.get('note')
             if 'file' in request.files:
                 print("File in request")
                 file = request.files['file']

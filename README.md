@@ -24,7 +24,8 @@ Screenshot: https://i.imgur.com/9Cp6g64.png
 - [ ] read GPS data from pic and set coordinates according to that instead (optional)
 - [ ] add authentication and private worlds
 - [ ] warn when overwriting files
-
+- [ ] allow video upload
+- [ ] allow requests and rewards (escrow for payments?)
 
 ## Credits
 
